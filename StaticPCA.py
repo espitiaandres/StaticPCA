@@ -52,7 +52,6 @@ while len(PCArray) < cols:
         pVector, xMatrix, xMatrixTranspose = p_extraction_lagrange_multiplier(xMatrix, XMatrixTranspose)
     else:
         print("Something went wrong, please check your data set again.")
-    print(PCArray)
 
 with open('PrincipleComponents.csv', 'w') as f:
     for item in PCArray:
