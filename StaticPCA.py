@@ -33,26 +33,33 @@ XMatrix = np.array(delete(XMatrix, XMatrix.shape[1] - 1, 1))    # removes last c
 rows, cols = XMatrix.shape[0], XMatrix.shape[1]
 XMatrix = XMatrix.astype(np.float)
 XMatrixTranspose = np.array(XMatrix.transpose())
-tol = 1e-5                                                      # set tolerance for relative error to make sure norm(p) == 1
+tol = 1e-12                                                      # set tolerance for relative error to make sure norm(p) == 1
 PCArray = []
 pVector, xMatrix, xMatrixTranspose = p_extraction_lagrange_multiplier(XMatrix, XMatrixTranspose)  # loading vector p, eigenvector for PC1
 tVector = xMatrix @ pVector                                                                       # Matrix multiplication to determine latent score vector t
 normPVector = linalg.norm(pVector)
 relativeError = abs(1 - normPVector)
+count = 0
 
-while len(PCArray) < cols:
-    new_relative_error = abs(1 - normPVector)
+while len(PCArray) < cols + 2:
+    new_relative_error = abs(1 - normPVector)       #determines convergence criteria if the p vector gives the largest veriance
     pVector = pVector.reshape(cols, 1)
     pVectorTranspose = pVector.transpose()
     tVector = np.resize(tVector, (rows, 1))
-    xMatrix = xMatrix - np.asarray(tVector @ pVectorTranspose)
+    xMatrix = xMatrix - np.asarray(tVector @ pVectorTranspose)      #Deflate xMatrix to extract next loading vector
     xMatrixTranspose = xMatrix.transpose()
-    if new_relative_error < tol:
+    if count < 2:
         PCArray.append(pVector.transpose())
-        pVector, xMatrix, xMatrixTranspose = p_extraction_lagrange_multiplier(xMatrix, XMatrixTranspose)
+        count += 1
+        continue
     else:
-        print("Something went wrong, please check your data set again.")
-
+        if new_relative_error < tol:
+            PCArray.append(pVector.transpose())
+            pVector, xMatrix, xMatrixTranspose = p_extraction_lagrange_multiplier(xMatrix, XMatrixTranspose)
+        else:
+            print("Something went wrong, please check your data set again.")
+PCArray.pop(0)
+PCArray.pop(0)
 with open('PrincipleComponents.csv', 'w') as f:
     for item in PCArray:
         f.write(str(item) + ", \n\n")
