@@ -37,7 +37,7 @@ tol = 1e-12                                                      # set tolerance
 PCArray = []
 pVector, xMatrix, xMatrixTranspose = p_extraction_lagrange_multiplier(XMatrix, XMatrixTranspose)  # loading vector p, eigenvector for PC1
 tVector = xMatrix @ pVector                                                                       # Matrix multiplication to determine latent score vector t
-normPVector = linalg.norm(pVector)
+normPVector = linalg.norm(pVector)                               # ensures that the eigenvector has the highest magnitude of 1
 relativeError = abs(1 - normPVector)
 count = 0
 
