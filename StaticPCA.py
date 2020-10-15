@@ -1,5 +1,4 @@
 import csv
-from numpy import *
 from numpy import linalg as LA
 import numpy as np
 import os
