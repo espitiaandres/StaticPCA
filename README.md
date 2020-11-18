@@ -7,5 +7,5 @@
 
 ### Workflow
 
-- Currently the script takes the TEPdataProc1dataCSV.csv file as input and performs static PCA.
-- The script then outputs the principal component vectors into the PrincipleComponents.csv file.
+- Currently the script takes the a csv file as input and performs static PCA.
+- The script then outputs the principal component vectors into a PrincipleComponents.csv file.
